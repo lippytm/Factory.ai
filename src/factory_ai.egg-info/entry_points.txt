@@ -1,2 +1,0 @@
-[console_scripts]
-factory-ai = factory_ai.cli:main
