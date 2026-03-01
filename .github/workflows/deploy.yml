@@ -1,0 +1,125 @@
+# deploy.yml
+#
+# One-click deployment of a single bot or a swarm from a Factory.ai
+# template.  Triggered manually via workflow_dispatch so that operators
+# can choose the template and target environment at run time.
+
+name: Deploy Bot / Swarm
+
+on:
+  workflow_dispatch:
+    inputs:
+      template:
+        description: >
+          Template path relative to the repository root
+          (e.g. templates/customer_support)
+        required: true
+        type: string
+      bot_name:
+        description: "Name to assign to the deployed bot"
+        required: true
+        type: string
+      environment:
+        description: "Target deployment environment"
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
+          - staging
+          - development
+      swarm_bots:
+        description: >
+          Comma-separated list of bot names to include in a swarm deployment
+          (leave empty for a single-bot deploy)
+        required: false
+        type: string
+      swarm_coordinator:
+        description: "Swarm coordination strategy"
+        required: false
+        default: round-robin
+        type: choice
+        options:
+          - round-robin
+          - priority
+          - least-loaded
+
+jobs:
+  validate:
+    name: Validate template before deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate template manifest
+        run: python ci_cd/scripts/validate_templates.py
+
+  deploy:
+    name: Deploy ${{ inputs.bot_name }} to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: validate
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Log components used
+        run: |
+          python ci_cd/scripts/log_components.py \
+            --output component_log.json
+          echo "## Component Transparency Log" >> "$GITHUB_STEP_SUMMARY"
+          cat component_log.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload component log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: component-log-${{ github.run_id }}
+          path: component_log.json
+
+      - name: Deploy bot (single)
+        if: ${{ inputs.swarm_bots == '' }}
+        env:
+          ALLBOTS_API_KEY: ${{ secrets.ALLBOTS_API_KEY }}
+        run: |
+          echo "Deploying bot '${{ inputs.bot_name }}' from template '${{ inputs.template }}' to '${{ inputs.environment }}'..."
+          # Replace the echo below with your actual deploy command, e.g.:
+          # python -m factory deploy \
+          #   --template "${{ inputs.template }}" \
+          #   --name "${{ inputs.bot_name }}" \
+          #   --env "${{ inputs.environment }}"
+          echo "Deploy command placeholder – wire up python -m factory deploy here."
+
+      - name: Deploy swarm
+        if: ${{ inputs.swarm_bots != '' }}
+        env:
+          ALLBOTS_API_KEY: ${{ secrets.ALLBOTS_API_KEY }}
+        run: |
+          echo "Deploying swarm with bots '${{ inputs.swarm_bots }}' (coordinator: '${{ inputs.swarm_coordinator }}') to '${{ inputs.environment }}'..."
+          # Replace the echo below with your actual swarm command, e.g.:
+          # python -m factory swarm \
+          #   --bots "${{ inputs.swarm_bots }}" \
+          #   --coordinator "${{ inputs.swarm_coordinator }}" \
+          #   --env "${{ inputs.environment }}"
+          echo "Swarm deploy command placeholder – wire up python -m factory swarm here."

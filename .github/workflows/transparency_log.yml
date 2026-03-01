@@ -1,0 +1,56 @@
+# transparency_log.yml
+#
+# Runs after every successful deploy workflow to produce and archive a
+# structured JSON report of which Factory.ai components were used.
+# The report is attached as a workflow artifact and appended to the
+# GitHub Actions job summary for audit and transparency purposes.
+
+name: Transparency Log
+
+on:
+  workflow_run:
+    workflows: ["Deploy Bot / Swarm"]
+    types: [completed]
+
+jobs:
+  log:
+    name: Generate component transparency log
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Run whether or not the triggering deploy succeeded so we always
+    # have a record of what was attempted.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate transparency log
+        run: |
+          python ci_cd/scripts/log_components.py \
+            --output transparency_log.json
+
+      - name: Append log to job summary
+        run: |
+          echo "## Factory.ai Component Transparency Log" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Generated at: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat transparency_log.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload transparency log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparency-log-${{ github.run_id }}
+          path: transparency_log.json
+          retention-days: 90

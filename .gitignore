@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# CI/CD generated artifacts
+component_log.json
+transparency_log.json
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

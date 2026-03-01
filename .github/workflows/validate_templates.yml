@@ -1,0 +1,40 @@
+# validate_templates.yml
+#
+# Validates every bot.yaml template manifest in the repository on every
+# push and pull-request targeting the main branch.
+
+name: Validate Templates
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "templates/**"
+      - "ci_cd/scripts/validate_templates.py"
+  pull_request:
+    branches: [main]
+    paths:
+      - "templates/**"
+      - "ci_cd/scripts/validate_templates.py"
+
+jobs:
+  validate:
+    name: Validate bot.yaml manifests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run template validation
+        run: python ci_cd/scripts/validate_templates.py
