@@ -7,6 +7,7 @@
 ## Features
 
 - **Personalized Templates** — Pre-built, industry-specific bot templates (customer support, automation, data pipelines, and more) that can be customized to fit your needs.
+- **Brain Kits** — Pre-assembled AI brains that bundle NLP, memory, and decision components into a single drop-in module, shared across all repositories in the ecosystem.
 - **Modular AI Components** — Composable building blocks (NLP processors, decision engines, memory modules, integrations) that snap together to form complete bots.
 - **Multi-Cloud Integration** — First-class connectors for AWS, Azure, GCP, and AllBots.com so you can deploy wherever your workload lives.
 - **Swarm Orchestration** — Coordinate multiple bots as a unified swarm with shared context and task delegation.
@@ -19,6 +20,7 @@
 ```
 Factory.ai/
 ├── components/          # Reusable base modules for bot construction
+│   ├── brain_kit/       # Pre-assembled AI brain (NLP + memory + decision)
 │   ├── nlp/             # Natural-language processing helpers
 │   ├── memory/          # Conversation and state memory adapters
 │   ├── decision/        # Decision-tree and rule-engine modules
@@ -87,6 +89,41 @@ python -m factory swarm \
   --bots "SupportBot,AutoBot" \
   --coordinator round-robin \
   --env production
+```
+
+---
+
+## Brain Kits
+
+**Brain Kits** are pre-assembled AI brains that wire NLP, memory, and decision
+components into a single reusable object.  They are a cross-repository
+standard across the lippytm ecosystem — every repository that builds on
+Factory.ai can attach a Brain Kit to its bots via the `brain_kit` section of
+`bot.yaml`.
+
+```yaml
+# bot.yaml (excerpt)
+brain_kit:
+  module: components.brain_kit.brain_kit
+  intents:
+    greeting: ["hello", "hi"]
+    farewell:  ["bye", "goodbye"]
+  memory:
+    ttl_seconds: 3600
+  decision:
+    rules:
+      - condition: "intent == 'greeting'"
+        action:    "send_welcome"
+```
+
+```python
+from components.brain_kit import BrainKit
+
+brain = BrainKit(
+    intents={"greeting": ["hello", "hi"], "farewell": ["bye", "goodbye"]},
+)
+result = brain.process("Hello there!")
+# {"tokens": ["Hello", "there!"], "intent": "greeting", "entities": {}, "action": None}
 ```
 
 ---

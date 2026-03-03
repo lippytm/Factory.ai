@@ -9,6 +9,28 @@ description: >
   A customer-support bot that handles common inquiries, escalates complex
   issues to human agents, and stores conversation context between turns.
 
+# ── Brain Kit ─────────────────────────────────────────────────────────────────
+brain_kit:
+  module: components.brain_kit.brain_kit
+  intents:
+    greeting:    ["hello", "hi", "hey", "good morning", "good afternoon"]
+    farewell:    ["bye", "goodbye", "see you", "thanks", "thank you"]
+    billing:     ["invoice", "charge", "bill", "payment", "refund"]
+    technical:   ["error", "bug", "crash", "not working", "broken"]
+    escalate:    ["agent", "human", "supervisor", "manager"]
+  memory:
+    ttl_seconds: 3600       # session expires after 1 hour of inactivity
+  decision:
+    rules:
+      - condition: "intent == 'escalate'"
+        action:    "transfer_to_human_agent"
+      - condition: "intent == 'billing'"
+        action:    "open_billing_flow"
+      - condition: "intent == 'technical'"
+        action:    "open_technical_flow"
+      - condition: "intent in ('greeting', 'farewell')"
+        action:    "send_canned_response"
+
 # ── Components ────────────────────────────────────────────────────────────────
 components:
   nlp:

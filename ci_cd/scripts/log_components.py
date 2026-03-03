@@ -35,8 +35,9 @@ def extract_components(manifest: dict) -> dict:
     components = manifest.get("components", {})
     extensions = manifest.get("extensions", [])
     integrations = manifest.get("integrations", {})
+    brain_kit = manifest.get("brain_kit", {})
 
-    return {
+    component_summary: dict = {
         "core_components": {
             name: cfg.get("module", "unknown") if isinstance(cfg, dict) else str(cfg)
             for name, cfg in components.items()
@@ -47,6 +48,14 @@ def extract_components(manifest: dict) -> dict:
             for name, cfg in integrations.items()
         },
     }
+
+    if brain_kit:
+        component_summary["brain_kit"] = {
+            "module": brain_kit.get("module", "unknown"),
+            "enabled": True,
+        }
+
+    return component_summary
 
 
 def build_report(templates_root: Path) -> dict:
