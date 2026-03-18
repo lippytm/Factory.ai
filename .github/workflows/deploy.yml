@@ -60,7 +60,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pyyaml
+        run: pip install -r requirements.txt
 
       - name: Validate template manifest
         run: python ci_cd/scripts/validate_templates.py
@@ -83,7 +83,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pyyaml
+        run: pip install -r requirements.txt
 
       - name: Log components used
         run: |
@@ -103,23 +103,17 @@ jobs:
         env:
           ALLBOTS_API_KEY: ${{ secrets.ALLBOTS_API_KEY }}
         run: |
-          echo "Deploying bot '${{ inputs.bot_name }}' from template '${{ inputs.template }}' to '${{ inputs.environment }}'..."
-          # Replace the echo below with your actual deploy command, e.g.:
-          # python -m factory deploy \
-          #   --template "${{ inputs.template }}" \
-          #   --name "${{ inputs.bot_name }}" \
-          #   --env "${{ inputs.environment }}"
-          echo "Deploy command placeholder – wire up python -m factory deploy here."
+          python -m factory deploy \
+            --template "${{ inputs.template }}" \
+            --name "${{ inputs.bot_name }}" \
+            --env "${{ inputs.environment }}"
 
       - name: Deploy swarm
         if: ${{ inputs.swarm_bots != '' }}
         env:
           ALLBOTS_API_KEY: ${{ secrets.ALLBOTS_API_KEY }}
         run: |
-          echo "Deploying swarm with bots '${{ inputs.swarm_bots }}' (coordinator: '${{ inputs.swarm_coordinator }}') to '${{ inputs.environment }}'..."
-          # Replace the echo below with your actual swarm command, e.g.:
-          # python -m factory swarm \
-          #   --bots "${{ inputs.swarm_bots }}" \
-          #   --coordinator "${{ inputs.swarm_coordinator }}" \
-          #   --env "${{ inputs.environment }}"
-          echo "Swarm deploy command placeholder – wire up python -m factory swarm here."
+          python -m factory swarm \
+            --bots "${{ inputs.swarm_bots }}" \
+            --coordinator "${{ inputs.swarm_coordinator }}" \
+            --env "${{ inputs.environment }}"

@@ -53,8 +53,6 @@ def deploy_function_app(
             "Install them with: pip install azure-mgmt-web azure-identity"
         ) from exc
 
-    import io
-
     from azure.core.exceptions import HttpResponseError  # type: ignore[import]
 
     credential = DefaultAzureCredential()
