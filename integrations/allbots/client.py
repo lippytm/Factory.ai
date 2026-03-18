@@ -7,7 +7,10 @@ bots/swarms to the AllBots platform via its REST API.
 
 from __future__ import annotations
 
+import json
 import os
+import urllib.error
+import urllib.request
 from typing import Any
 
 
@@ -97,10 +100,38 @@ class AllBotsClient:
     def _post(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
         """Send a POST request to the AllBots API.
 
-        This is a thin stub that can be replaced with a real HTTP client
-        (e.g. ``httpx`` or ``requests``) when the package is wired up.
+        Parameters
+        ----------
+        path:
+            API path (e.g. ``"/bots/deploy"``).
+        body:
+            JSON-serialisable request body.
+
+        Returns
+        -------
+        dict[str, Any]
+            Parsed JSON response from the API.
+
+        Raises
+        ------
+        RuntimeError
+            On non-2xx HTTP responses.
         """
-        raise NotImplementedError(
-            "AllBotsClient._post must be implemented with a real HTTP client. "
-            "Install 'httpx' or 'requests' and replace this stub."
+        url = f"{self.base_url}{path}"
+        payload = json.dumps(body).encode()
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+            },
+            method="POST",
         )
+        try:
+            with urllib.request.urlopen(req) as response:
+                return json.loads(response.read())  # type: ignore[no-any-return]
+        except urllib.error.HTTPError as exc:
+            raise RuntimeError(
+                f"AllBots API error {exc.code} {exc.reason} for POST {path}"
+            ) from exc

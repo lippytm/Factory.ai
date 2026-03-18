@@ -18,6 +18,7 @@
 
 ```
 Factory.ai/
+├── factory/             # CLI package (`python -m factory`)
 ├── components/          # Reusable base modules for bot construction
 │   ├── nlp/             # Natural-language processing helpers
 │   ├── memory/          # Conversation and state memory adapters
@@ -31,9 +32,12 @@ Factory.ai/
 │   ├── aws/
 │   ├── azure/
 │   └── gcp/
+├── tests/               # Unit test suite (pytest)
 ├── ci_cd/               # Reusable CI/CD scripts and helpers
 │   ├── scripts/
 │   └── docs/
+├── pyproject.toml       # Project metadata and tool configuration
+├── requirements.txt     # Runtime and optional dependencies
 └── .github/
     └── workflows/       # GitHub Actions workflow definitions
 ```
@@ -53,7 +57,7 @@ Factory.ai/
 ```bash
 git clone https://github.com/lippytm/Factory.ai.git
 cd Factory.ai
-pip install -r requirements.txt   # add once dependencies are defined
+pip install -r requirements.txt
 ```
 
 ### Generate a Bot from a Template
@@ -95,6 +99,7 @@ python -m factory swarm \
 
 | Workflow | File | Trigger |
 |---|---|---|
+| CI (Lint & Test) | `.github/workflows/ci.yml` | Push / PR to `main` |
 | Validate Templates | `.github/workflows/validate_templates.yml` | Push / PR to `main` |
 | Deploy Bot / Swarm | `.github/workflows/deploy.yml` | Manual (`workflow_dispatch`) |
 | Transparency Log | `.github/workflows/transparency_log.yml` | After every deploy |
@@ -108,9 +113,10 @@ We welcome contributions! Please follow these steps:
 1. **Fork** the repository and create a feature branch: `git checkout -b feat/your-feature`.
 2. Add or update code under the relevant directory (`components/`, `templates/`, `integrations/`).
 3. Write or update tests in the corresponding `tests/` sub-directory (if present).
-4. Ensure the **Validate Templates** CI check passes locally:
+4. Ensure the **CI** check passes locally:
    ```bash
-   python -m pytest ci_cd/scripts/
+   flake8 .
+   pytest
    ```
 5. Open a Pull Request against `main` with a clear description of your changes.
 
