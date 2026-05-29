@@ -9,6 +9,7 @@
 - **Personalized Templates** — Pre-built, industry-specific bot templates (customer support, automation, data pipelines, and more) that can be customized to fit your needs.
 - **Modular AI Components** — Composable building blocks (NLP processors, decision engines, memory modules, integrations) that snap together to form complete bots.
 - **Multi-Cloud Integration** — First-class connectors for AWS, Azure, GCP, and AllBots.com so you can deploy wherever your workload lives.
+- **Cross-Chain Agent Prototype** — Quote-first MoonPay Trade integration template for AI agents that need human-approved cross-chain execution across 200+ chains/protocols.
 - **Swarm Orchestration** — Coordinate multiple bots as a unified swarm with shared context and task delegation.
 - **CI/CD Pipelines** — Built-in GitHub Actions workflows for automated testing, validation, one-click deployment, and full component-usage transparency logging.
 
@@ -27,11 +28,12 @@ Factory.ai/
 ├── templates/           # Pre-designed industry-specific bot templates
 │   ├── customer_support/
 │   └── automation/
-├── integrations/        # Connectors to AllBots.com and cloud providers
+├── integrations/        # Connectors to AllBots.com, cloud providers, and Web3 rails
 │   ├── allbots/
 │   ├── aws/
 │   ├── azure/
-│   └── gcp/
+│   ├── gcp/
+│   └── moonpay_trade/
 ├── tests/               # Unit test suite (pytest)
 ├── ci_cd/               # Reusable CI/CD scripts and helpers
 │   ├── scripts/
@@ -92,6 +94,16 @@ python -m factory swarm \
   --coordinator round-robin \
   --env production
 ```
+
+### Preview a Cross-Chain Agent
+
+```bash
+python -m factory generate \
+  --template templates/cross_chain_agent \
+  --name "MoonPayTradeAgent"
+```
+
+The cross-chain template defaults to dry-run mode and requires human approval before live MoonPay Trade execution.
 
 ---
 

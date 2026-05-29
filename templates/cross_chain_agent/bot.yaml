@@ -1,0 +1,25 @@
+name: CrossChainAgent
+version: 0.1.0
+summary: AI agent template for quote-first cross-chain execution through MoonPay Trade.
+components:
+  - integrations.moonpay_trade.client.MoonPayTradeClient
+  - integrations.moonpay_trade.client.CrossChainExecutionRequest
+capabilities:
+  - quote_cross_chain_route
+  - request_human_approval
+  - execute_cross_chain_transaction
+deployment:
+  environment_target: development
+  required_secrets:
+    - MOONPAY_TRADE_API_KEY
+  safety_controls:
+    dry_run_default: true
+    human_approval_required: true
+    max_slippage_bps: 50
+example_intent:
+  source_chain: solana
+  destination_chain: base
+  from_asset: USDC
+  to_asset: USDC
+  amount: "25.00"
+  wallet_address: "demo-wallet-address"
