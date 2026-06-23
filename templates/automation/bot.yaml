@@ -9,6 +9,27 @@ description: >
   A task-automation bot that processes triggers, applies business rules,
   and executes workflows across integrated cloud services.
 
+# ── Brain Kit ─────────────────────────────────────────────────────────────────
+brain_kit:
+  module: components.brain_kit.brain_kit
+  intents:
+    run_job:     ["run", "execute", "start", "trigger", "launch"]
+    stop_job:    ["stop", "cancel", "abort", "halt", "kill"]
+    status:      ["status", "check", "list", "show", "report"]
+    schedule:    ["schedule", "cron", "at", "every", "interval"]
+  memory:
+    ttl_seconds: 86400      # retain job context for 24 hours
+  decision:
+    rules:
+      - condition: "intent == 'run_job'"
+        action:    "dispatch_job"
+      - condition: "intent == 'stop_job'"
+        action:    "cancel_job"
+      - condition: "intent == 'status'"
+        action:    "report_status"
+      - condition: "intent == 'schedule'"
+        action:    "create_schedule"
+
 # ── Components ────────────────────────────────────────────────────────────────
 components:
   nlp:
