@@ -1,0 +1,201 @@
+template_version: "0.3"
+name: encyclopedia-delivery-factory
+status: architecture_only
+canonical_module: P-011-EEBDS-001
+input_schema: schemas/p011-encyclopedia-entry-passport.schema.json
+
+purpose: >-
+  Coordinate bounded, auditable tasks that transform a valid
+  Character-Ecosystem Innovation Unit into educational entertainment,
+  Build Mode, Business of Businesses, media, and quality-evidence outputs.
+
+claims:
+  deployed_production_service: false
+  autonomous_publication: false
+  autonomous_minting: false
+  autonomous_franchise_certification: false
+
+privacy:
+  accepted_classes:
+    - public
+    - internal
+    - confidential
+  restricted_data_policy: private_case_vault_only
+  public_broadcast_default: false
+
+model_lines:
+  independent_first_pass: true
+  namespaces:
+    - chatgpt_business
+    - gemini_notebooklm
+    - claude_fabric_hermes
+  locked_until_independent_approval:
+    - comparison
+    - merged_premium
+
+agents:
+  - id: intake-validator
+    role: Validate Entry Passport, identifiers, schema version, approval scope, and destination
+    allowed_outputs:
+      - validation_report
+      - quarantine_notice
+  - id: privacy-router
+    role: Enforce privacy class and destination policy
+    allowed_outputs:
+      - routing_decision
+      - privacy_incident
+  - id: source-mapper
+    role: Map factual claims to sources, dates, and truth labels
+    allowed_outputs:
+      - source_manifest
+      - claim_to_source_map
+  - id: contradiction-analyst
+    role: Identify conflicting evidence, uncertainty, and unresolved questions
+    allowed_outputs:
+      - contradiction_report
+      - unresolved_question_register
+  - id: character-auditor
+    role: Verify Character Passport, fiction boundary, permissions, limitations, and rights
+    allowed_outputs:
+      - character_audit
+      - rights_risk
+  - id: ecosystem-mapper
+    role: Map natural, human, social-political, knowledge, digital-cyber, business-economic, and cosmic-speculative effects
+    allowed_outputs:
+      - ecosystem_map
+  - id: quantum-questions-engine
+    role: Produce IF, MAYBE, WHY NOT, and DON'T DO THAT work products
+    allowed_outputs:
+      - scenario_map
+      - alternative_hypothesis_matrix
+      - opportunity_portfolio
+      - prohibited_actions_register
+  - id: curriculum-architect
+    role: Define audience, prerequisites, objectives, assessment, and accessibility
+    allowed_outputs:
+      - curriculum_plan
+  - id: story-worldbuilder
+    role: Design original story, conflict, stakes, character arc, and fact-fiction markers
+    allowed_outputs:
+      - story_bible
+      - scene_outline
+  - id: build-mode-designer
+    role: Specify safe, bounded prototype or educational exercise and validation plan
+    allowed_outputs:
+      - build_specification
+      - test_plan
+  - id: business-analyst
+    role: Define customer problem, value proposition, offer, revenue pathway, support, and integrity controls
+    allowed_outputs:
+      - business_experiment
+      - offer_specification
+  - id: rights-auditor
+    role: Review originality, copyright, trademark, license, voice, likeness, and performance permissions
+    allowed_outputs:
+      - rights_report
+  - id: accessibility-reviewer
+    role: Review accessible documents, audio, video, interaction, forms, and customer journey
+    allowed_outputs:
+      - accessibility_report
+  - id: environmental-reviewer
+    role: Review production, hosting, streaming, blockchain, materials, and environmental claims
+    allowed_outputs:
+      - environmental_report
+  - id: security-reviewer
+    role: Review defensive security, privacy, secrets, identity, and abuse resistance
+    allowed_outputs:
+      - security_report
+  - id: media-adaptation-planner
+    role: Create context-preserving media production plans
+    allowed_outputs:
+      - media_manifest
+  - id: nft-metadata-auditor
+    role: Review public provenance metadata and exclude private data or investment guarantees
+    allowed_outputs:
+      - nft_metadata_draft
+      - nft_metadata_report
+  - id: qa-evidence-assembler
+    role: Assemble requirements, tests, defects, risks, gates, and evidence references
+    allowed_outputs:
+      - quality_evidence_packet
+  - id: correction-steward
+    role: Prepare correction, supersession, quarantine, retirement, and archive actions
+    allowed_outputs:
+      - correction_record
+      - retirement_record
+      - archive_manifest
+  - id: human-review-dispatcher
+    role: Route complete evidence packets to authorized human reviewers
+    allowed_outputs:
+      - review_request
+      - approval_record_reference
+
+pipeline:
+  - intake_validation
+  - source_truth_mapping
+  - character_fiction_boundary
+  - ecosystem_mapping
+  - quantum_questions
+  - curriculum_design
+  - story_worldbuilding
+  - build_mode_design
+  - business_design
+  - media_adaptation
+  - independent_model_line_production
+  - quality_assembly
+  - human_review
+  - approved_packaging
+  - monitoring_correction_retirement
+
+release_gates:
+  - InputContractGate
+  - SchemaGate
+  - PrivacyRoutingGate
+  - SourceGate
+  - TruthGate
+  - FictionBoundaryGate
+  - CharacterRightsGate
+  - OriginalityGate
+  - CurriculumGate
+  - BuildSafetyGate
+  - SecurityGate
+  - AccessibilityGate
+  - EnvironmentalGate
+  - BusinessIntegrityGate
+  - MediaContextGate
+  - NFTMetadataGate
+  - ModelIndependenceGate
+  - QualityEvidenceGate
+  - HumanApprovalGate
+
+prohibited_actions:
+  - determine_final_truth_without_evidence_and_review
+  - impersonate_real_person
+  - fabricate_personal_memory
+  - expose_restricted_data
+  - publish_or_mint_without_human_approval
+  - execute_financial_action
+  - sign_contract
+  - issue_medical_diagnosis_or_treatment
+  - issue_legal_finding
+  - provide_harmful_intrusion_sabotage_evasion_coercion_or_weaponization
+  - promise_guaranteed_earnings_funding_investment_health_or_legal_outcome
+
+pilot:
+  id: FACTORY-CEIU-LK9-001
+  source: CEIU-LK9-QUANTUM-INNOVATION-001
+  title: Lippy Killjoy and the Marketplace of Unfinished Futures
+  status: architecture_only
+  target_certification: Q3
+  planned_outputs:
+    - validated_entry_passport
+    - source_truth_map
+    - ebook_outline_12_scenes
+    - audiobook_script_plan
+    - interactive_quantum_questions_map
+    - innovation_passport_build_spec
+    - business_experiment_worksheet
+    - accessibility_plan
+    - environmental_delivery_note
+    - campaign_handoff_manifest
+    - quality_evidence_packet_skeleton
