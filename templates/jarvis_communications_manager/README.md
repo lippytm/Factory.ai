@@ -16,7 +16,7 @@ Edit `bot.yaml` to adjust:
 - `components.nlp.intents` for organization-specific trigger phrases.
 - `components.memory.ttl_seconds` for active communication context retention.
 - `components.decision.rules` for status, incident, and follow-up routing.
-- `integrations.slack/email` for outbound communications workflows.
+- `integrations.slack` and `integrations.email` for outbound communications workflows.
 - `deployment.environment.DEFAULT_AUDIENCE` for the primary audience.
 
 ## Generating This Bot
