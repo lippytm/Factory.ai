@@ -26,7 +26,7 @@ Edit `bot.yaml` to:
 ```bash
 python -m factory generate \
   --template templates/ai_jarvis_assistant \
-  --name "JarvisAssistantBot" \
+  --name "AIJarvisAssistantBot" \
   --env production
 ```
 

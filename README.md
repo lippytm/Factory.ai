@@ -105,7 +105,7 @@ pip install -r requirements.txt
 ```bash
 python -m factory generate --template templates/customer_support --name "SupportBot"
 python -m factory generate --template templates/automation --name "AutoBot"
-python -m factory generate --template templates/ai_jarvis_assistant --name "JarvisAssistantBot"
+python -m factory generate --template templates/ai_jarvis_assistant --name "AIJarvisAssistantBot"
 python -m factory generate --template templates/engineer_manager --name "EngineerManagerBot"
 python -m factory generate --template templates/communications_manager --name "CommunicationsManagerBot"
 ```
