@@ -11,15 +11,13 @@ An AI assistant for engineering managers who need structured, reusable communica
 
 ## Configuration
 
-Edit `bot.yaml` to:
+Edit `bot.yaml` to adjust:
 
-| Key | Description |
-|---|---|
-| `components.nlp.intents` | Adjust trigger phrases for your organization. |
-| `components.memory.ttl_seconds` | Change how long active communication context is retained. |
-| `components.decision.rules` | Customize routing for status, incidents, and follow-ups. |
-| `integrations.slack/email` | Enable outbound communications integrations. |
-| `deployment.environment.DEFAULT_AUDIENCE` | Set the primary communications audience. |
+- `components.nlp.intents` for organization-specific trigger phrases.
+- `components.memory.ttl_seconds` for active communication context retention.
+- `components.decision.rules` for status, incident, and follow-up routing.
+- `integrations.slack/email` for outbound communications workflows.
+- `deployment.environment.DEFAULT_AUDIENCE` for the primary audience.
 
 ## Generating This Bot
 
