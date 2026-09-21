@@ -41,7 +41,7 @@ This is an **architecture and template specification**. It does not claim that t
 
 ## Features
 
-- **Personalized Templates** — Pre-built, industry-specific templates that can be customized for customer support, automation, educational delivery, data pipelines, and additional workflows.
+- **Personalized Templates** — Pre-built, industry-specific templates that can be customized for customer support, automation, executive assistance, engineering management, communications operations, educational delivery, data pipelines, and additional workflows.
 - **Modular AI Components** — Composable NLP, decision, memory, validation, quality, and integration building blocks.
 - **Multi-Cloud Integration** — Connector patterns for AWS, Azure, GCP, AllBots.com, and compatible environments.
 - **Swarm Orchestration** — Coordinate multiple bounded agents with explicit roles, permissions, data classes, work packets, and human review.
@@ -65,6 +65,9 @@ Factory.ai/
 ├── templates/
 │   ├── customer_support/
 │   ├── automation/
+│   ├── ai_jarvis_assistant/
+│   ├── engineer_manager/
+│   ├── communications_manager/
 │   └── encyclopedia_delivery/
 │       └── bot.yaml
 ├── integrations/
@@ -102,6 +105,9 @@ pip install -r requirements.txt
 ```bash
 python -m factory generate --template templates/customer_support --name "SupportBot"
 python -m factory generate --template templates/automation --name "AutoBot"
+python -m factory generate --template templates/ai_jarvis_assistant --name "JarvisAssistantBot"
+python -m factory generate --template templates/engineer_manager --name "EngineerManagerBot"
+python -m factory generate --template templates/communications_manager --name "CommunicationsManagerBot"
 ```
 
 The `encyclopedia_delivery` template added by the Prompt #11 integration is currently a workflow architecture manifest. It requires implementation, tests, security review, and HumanApprovalGate before deployment.
