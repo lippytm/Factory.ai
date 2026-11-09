@@ -100,3 +100,46 @@ class TestValidateManifest:
         path = _write_yaml(tmp_path, "- item1\n- item2\n")
         errors = validate_manifest(path)
         assert any("mapping" in e.lower() for e in errors)
+
+
+ARCHITECTURE_MANIFEST = textwrap.dedent("""\
+    template_version: "0.3"
+    name: design-only-factory
+    status: architecture_only
+    purpose: Describe a pipeline that is not built yet.
+    claims:
+      deployed_production_service: false
+    agents:
+      - id: intake-validator
+        role: Validate input
+    pipeline:
+      - intake_validation
+""")
+
+
+class TestArchitectureOnlyManifest:
+    def test_valid_architecture_manifest(self, tmp_path):
+        assert validate_manifest(_write_yaml(tmp_path, ARCHITECTURE_MANIFEST)) == []
+
+    def test_architecture_manifest_must_not_deploy(self, tmp_path):
+        content = ARCHITECTURE_MANIFEST + "deployment:\n  target: allbots\n"
+        errors = validate_manifest(_write_yaml(tmp_path, content))
+        assert any("must not define 'deployment'" in e for e in errors)
+
+    def test_architecture_manifest_must_not_claim_production(self, tmp_path):
+        content = ARCHITECTURE_MANIFEST.replace("deployed_production_service: false",
+                                                "deployed_production_service: true")
+        errors = validate_manifest(_write_yaml(tmp_path, content))
+        assert any("production service" in e for e in errors)
+
+    def test_architecture_manifest_requires_agents_and_pipeline(self, tmp_path):
+        content = ARCHITECTURE_MANIFEST.replace("pipeline:\n  - intake_validation\n", "")
+        content = content.replace("agents:\n  - id: intake-validator\n    role: Validate input\n",
+                                  "agents: []\n")
+        errors = validate_manifest(_write_yaml(tmp_path, content))
+        assert any("'pipeline'" in e for e in errors)
+        assert any("'agents'" in e for e in errors)
+
+    def test_repository_templates_are_valid(self):
+        from ci_cd.scripts.validate_templates import main
+        assert main() == 0
