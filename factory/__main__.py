@@ -71,6 +71,13 @@ def cmd_generate(args: argparse.Namespace) -> int:
 def cmd_deploy(args: argparse.Namespace) -> int:
     """Deploy a single bot to the AllBots platform."""
     manifest = _load_manifest(args.template)
+    if manifest.get("status") == "architecture_only":
+        print(
+            f"Refusing to deploy '{args.template}': it is an architecture-only design "
+            "(status: architecture_only), not a buildable bot.",
+            file=sys.stderr,
+        )
+        return 1
     if args.name:
         manifest["name"] = args.name
     if args.env:
