@@ -35,13 +35,14 @@ CONFIG = {
     "exchange": os.getenv("EXCHANGE", "binance"),          # binance, coinbase, kraken
     "api_key": os.getenv("API_KEY", ""),                   # Exchange API key
     "api_secret": os.getenv("API_SECRET", ""),             # Exchange API secret
-    "trading_pair": os.getenv("TRADING_PAIR", "BTC/USDT"), # What to buy
-    "buy_amount_usd": float(os.getenv("BUY_AMOUNT", "50")),# How much per DCA
-    "interval_hours": int(os.getenv("INTERVAL_HOURS", "72")),# How often (hours)
+    "trading_pair": os.getenv("TRADING_PAIR", "BTC/USDT"),  # What to buy
+    "buy_amount_usd": float(os.getenv("BUY_AMOUNT", "50")),  # How much per DCA
+    "interval_hours": int(os.getenv("INTERVAL_HOURS", "72")),  # How often (hours)
     "paper_trading": os.getenv("PAPER_TRADING", "true").lower() == "true",
     "telegram_token": os.getenv("TELEGRAM_TOKEN", ""),
     "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID", ""),
 }
+
 
 # ─────────────────────────────────────────────
 # MARVIN'S BRAIN
@@ -116,7 +117,8 @@ class MarvinDCABot:
             self.total_invested += amount_usd
             self.total_acquired += amount_coin
 
-            log.info(f"✅ DCA executed: {amount_coin:.6f} {self.config['trading_pair'].split('/')[0]} @ ${price:,.2f}")
+            base_coin = self.config['trading_pair'].split('/')[0]
+            log.info(f"✅ DCA executed: {amount_coin:.6f} {base_coin} @ ${price:,.2f}")
             self._save_trades()
             self._send_telegram_alert(trade)
             self._print_summary()
@@ -137,7 +139,7 @@ class MarvinDCABot:
         avg_price = self.total_invested / self.total_acquired if self.total_acquired > 0 else 0
 
         print("\n" + "="*50)
-        print(f"  🤖 MARVIN DCA BOT — PORTFOLIO SUMMARY")
+        print("  🤖 MARVIN DCA BOT — PORTFOLIO SUMMARY")
         print("="*50)
         print(f"  Pair:           {self.config['trading_pair']}")
         print(f"  Total Invested: ${self.total_invested:,.2f}")
@@ -149,7 +151,7 @@ class MarvinDCABot:
         print(f"  Total Trades:   {len(self.trades)}")
         print(f"  Mode:           {'📄 PAPER' if self.config['paper_trading'] else '💰 LIVE'}")
         print("="*50)
-        print(f"  \"Brain the size of a planet. Accumulating yours.\"")
+        print("  \"Brain the size of a planet. Accumulating yours.\"")
         print("="*50 + "\n")
 
     def _save_trades(self):
@@ -187,7 +189,9 @@ class MarvinDCABot:
                 "text": msg,
                 "parse_mode": "Markdown"
             }).encode()
-            req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+            req = urllib.request.Request(
+                url, data=data, headers={"Content-Type": "application/json"}
+            )
             urllib.request.urlopen(req)
             log.info("📱 Telegram alert sent")
         except Exception as e:
@@ -195,10 +199,14 @@ class MarvinDCABot:
 
     def run(self):
         """Start the bot — runs forever"""
-        log.info(f"🚀 Marvin DCA Bot STARTING")
+        log.info("🚀 Marvin DCA Bot STARTING")
         log.info(f"   Pair: {self.config['trading_pair']}")
-        log.info(f"   Amount: ${self.config['buy_amount_usd']} every {self.config['interval_hours']} hours")
-        log.info(f"   Mode: {'PAPER TRADING' if self.config['paper_trading'] else '💰 LIVE TRADING'}")
+        log.info(
+            f"   Amount: ${self.config['buy_amount_usd']} "
+            f"every {self.config['interval_hours']} hours"
+        )
+        mode = 'PAPER TRADING' if self.config['paper_trading'] else '💰 LIVE TRADING'
+        log.info(f"   Mode: {mode}")
 
         # Execute immediately on start
         self.execute_dca()

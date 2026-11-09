@@ -92,6 +92,28 @@ class TestCmdDeploy:
         result = json.loads(out)
         assert result["deployment_id"] == "d1"
 
+    def test_deploy_refuses_architecture_only_template(self, tmp_path, capsys):
+        template_dir = tmp_path / "templates" / "design"
+        template_dir.mkdir(parents=True)
+        (template_dir / "bot.yaml").write_text(
+            "name: design\nstatus: architecture_only\ntemplate_version: '0.3'\n"
+        )
+        args = _make_args(template=str(template_dir), name=None, env="production")
+        mock_client = MagicMock()
+        with patch("factory.__main__.AllBotsClient", return_value=mock_client):
+            rc = cmd_deploy(args)
+        assert rc == 1
+        mock_client.deploy_bot.assert_not_called()
+        assert "architecture-only" in capsys.readouterr().err
+
+    def test_deploy_refuses_repository_encyclopedia_template(self, capsys):
+        template = Path(__file__).resolve().parents[1] / "templates" / "encyclopedia_delivery"
+        args = _make_args(template=str(template), name=None, env="production")
+        mock_client = MagicMock()
+        with patch("factory.__main__.AllBotsClient", return_value=mock_client):
+            assert cmd_deploy(args) == 1
+        mock_client.deploy_bot.assert_not_called()
+
     def test_deploy_returns_1_on_runtime_error(self, tmp_path, capsys):
         template_dir = _write_template(tmp_path)
         args = _make_args(template=str(template_dir), name="Bot", env="production")
